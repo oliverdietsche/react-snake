@@ -2,11 +2,10 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import { ReactNode } from 'react';
+import { BOARD_SIZE } from '../../config/GameConfig';
 import { ICoordinate } from '../../interfaces';
 import { TFieldType } from '../../types';
 import { Field } from '../Field';
-import { BOARD_SIZE } from './const';
-
 export interface IBoardProps {
 	rowCount: number;
 	colCount: number;

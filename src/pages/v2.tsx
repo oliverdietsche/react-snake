@@ -1,16 +1,15 @@
 import { Container, Grid } from '@material-ui/core';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Board } from '../components';
+import React, { useCallback, useRef, useState } from 'react';
+import { BoardV2 } from '../components';
 import { COL_COUNT, ROW_COUNT } from '../config/GameConfig';
 import { useLoop, useSnakeMovement } from '../hooks';
 import { useSpeed } from '../hooks/ useSpeed';
 import { ICoordinate, ISnake } from '../interfaces';
-import { areMatchingCoordinates, getRandomCoordinate, nextSnakeHead } from '../services';
+import { areMatchingCoordinates, generateBoard, getRandomCoordinate, nextSnakeHead } from '../services';
 import { TFieldType } from '../types';
 
 export default function GameView() {
-	const [rerender, setRerender] = useState(false);
-	const food = useRef<ICoordinate>();
+	const [board, setBoard] = useState<TFieldType[][]>(generateBoard());
 	const snake = useRef<ISnake>({
 		head: {
 			row: Math.floor(ROW_COUNT / 2),
@@ -37,43 +36,34 @@ export default function GameView() {
 		return randomCoordinate;
 	}, [isFieldEmpty]);
 
-	const fieldEvaluation = useCallback((coordinate: ICoordinate): TFieldType => {
-		if (areMatchingCoordinates(snake.current.head, coordinate)) return 'snake';
-		if (food.current && areMatchingCoordinates(food.current, coordinate)) return 'food';
-		for (const tailPart of snake.current.tail) {
-			if (areMatchingCoordinates(tailPart, coordinate)) return 'snake';
-		}
-		return 'empty';
-	}, []);
-
-	useEffect(() => {
-		food.current = getRandomEmptyCoordinate();
-	}, [getRandomEmptyCoordinate]);
+	const food = useRef(getRandomEmptyCoordinate());
 
 	useLoop(() => {
 		const nextHead = nextSnakeHead(snake.current, direction);
 		if (!isFieldEmpty(nextHead)) return; // GAME OVER
+
 		snake.current.tail.unshift(snake.current.head);
 		snake.current.head = nextHead;
-		if (food.current && !areMatchingCoordinates(nextHead, food.current)) {
-			snake.current.tail.pop();
-		} else {
+		const colletedFood = areMatchingCoordinates(nextHead, food.current);
+		const fieldToRemove = !colletedFood ? snake.current.tail.pop() : null;
+		if (colletedFood) {
 			increaseSpeed(0.2);
 			food.current = getRandomEmptyCoordinate();
 		}
-		setRerender(!rerender);
+
+		setBoard((currentBoard) => {
+			currentBoard[food.current.row][food.current.col] = 'food';
+			if (fieldToRemove) currentBoard[fieldToRemove.row][fieldToRemove.col] = 'empty';
+			currentBoard[nextHead.row][nextHead.col] = 'snake';
+			return [...currentBoard]; // change refference so that react rerenders
+		});
 	}, getIntervalMs());
 
 	return (
 		<Container maxWidth="md">
 			<Grid container spacing={2}>
 				<Grid item xs={12}>
-					<Board
-						displayGrid={false}
-						rowCount={ROW_COUNT}
-						colCount={COL_COUNT}
-						fieldEvaluation={fieldEvaluation}
-					/>
+					<BoardV2 displayGrid={false} board={board} />
 				</Grid>
 			</Grid>
 		</Container>
