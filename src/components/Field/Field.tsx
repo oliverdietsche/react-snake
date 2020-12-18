@@ -7,9 +7,10 @@ import { TFieldType } from '../../types';
 export interface IFieldProps {
 	type: TFieldType;
 	size: ISize;
+	displayGrid: boolean;
 }
 
-export function Field({ type, size }: IFieldProps) {
+export function Field({ type, size, displayGrid }: IFieldProps) {
 	const backgroundColor = (() => {
 		switch (type) {
 			case 'empty':
@@ -29,8 +30,8 @@ export function Field({ type, size }: IFieldProps) {
 				width: ${size.width}px;
 				height: ${size.height}px;
 				background-color: ${backgroundColor};
-				border: 1px solid black;
 				box-sizing: border-box;
+				${displayGrid ? 'border: 1px solid black;' : ''}
 			`}
 		/>
 	);

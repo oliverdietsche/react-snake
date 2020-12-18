@@ -26,7 +26,7 @@ export default function GameView() {
 		},
 		tail: [],
 	});
-	const { direction } = useSnakeMovement(true);
+	const { direction } = useSnakeMovement(INTERVAL);
 
 	const isFieldEmpty = useCallback(
 		(coordinate: ICoordinate) => {
@@ -59,7 +59,6 @@ export default function GameView() {
 	);
 
 	const loop = useCallback(() => {
-		if (!direction) return;
 		const nextHead = nextSnakeHead(snake, direction);
 		if (!isFieldEmpty(nextHead)) return; // GAME OVER
 		setSnake((currentSnake) => {
@@ -89,7 +88,7 @@ export default function GameView() {
 		<Container maxWidth="md">
 			<Grid container spacing={2}>
 				<Grid item xs={12}>
-					<Board rowCount={ROW_COUNT} colCount={COL_COUNT} fieldEvaluation={fieldEvaluation} />
+					<Board displayGrid={false} rowCount={ROW_COUNT} colCount={COL_COUNT} fieldEvaluation={fieldEvaluation} />
 				</Grid>
 			</Grid>
 		</Container>

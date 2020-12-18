@@ -10,16 +10,18 @@ import { BOARD_SIZE } from './const';
 export interface IBoardProps {
 	rowCount: number;
 	colCount: number;
+	displayGrid?: boolean;
 	fieldEvaluation?: (coordinate: ICoordinate) => TFieldType;
 }
 
-export function Board({ rowCount, colCount, fieldEvaluation }: IBoardProps) {
+export function Board({ rowCount, colCount, displayGrid = false, fieldEvaluation }: IBoardProps) {
 	const fields: ReactNode[] = [];
 	for (let row = 0; row < rowCount; row++) {
 		for (let col = 0; col < colCount; col++) {
 			fields.push(
 				<Field
 					key={`${row} - ${col}`}
+					displayGrid={displayGrid}
 					size={{ width: BOARD_SIZE.width / colCount, height: BOARD_SIZE.height / rowCount }}
 					type={fieldEvaluation ? fieldEvaluation({ row, col }) : 'empty'}
 				/>
@@ -33,7 +35,7 @@ export function Board({ rowCount, colCount, fieldEvaluation }: IBoardProps) {
 				height: ${BOARD_SIZE.height}px;
 				display: flex;
 				flex-flow: row wrap;
-				border: 1px solid black;
+				${displayGrid ? 'border: 1px solid black;' : ''}
 			`}
 		>
 			{fields}

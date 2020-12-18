@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { TDirection } from '../types';
 
-export const useSnakeMovement = (alwaysDirection = false) => {
-	const direction = useRef<TDirection | null>(alwaysDirection ? 'right' : null);
+export const useSnakeMovement = (delay: number) => {
+	const lastKeyPress = useRef(Date.now());
+	const direction = useRef<TDirection>('right');
 
 	const onKeyDown = useCallback(
 		(event: KeyboardEvent) => {
+			if (Date.now() - lastKeyPress.current < delay * 0.5) return;
+			lastKeyPress.current = Date.now();
 			const handleUp = () => {
 				if (direction.current === 'down') return;
 				direction.current = 'up';
@@ -43,60 +46,15 @@ export const useSnakeMovement = (alwaysDirection = false) => {
 					return;
 			}
 		},
-		[direction]
-	);
-
-	const onKeyUp = useCallback(
-		(event: KeyboardEvent) => {
-			if (alwaysDirection) return;
-			const handleKeyUp = () => {
-				if (direction.current === 'up') return;
-				direction.current = null;
-			};
-			const handleKeyLeft = () => {
-				if (direction.current === 'left') return;
-				direction.current = null;
-			};
-			const handleKeyDown = () => {
-				if (direction.current === 'down') return;
-				direction.current = null;
-			};
-			const handleKeyRight = () => {
-				if (direction.current === 'right') return;
-				direction.current = null;
-			};
-			switch (event.code) {
-				case 'KeyW':
-					return handleKeyUp();
-				case 'ArrowUp':
-					return handleKeyUp();
-				case 'KeyA':
-					return handleKeyLeft();
-				case 'ArrowLeft':
-					return handleKeyLeft();
-				case 'KeyS':
-					return handleKeyDown();
-				case 'ArrowDown':
-					return handleKeyDown();
-				case 'KeyD':
-					return handleKeyRight();
-				case 'ArrowRight':
-					return handleKeyRight();
-				default:
-					return;
-			}
-		},
-		[alwaysDirection]
+		[direction, delay]
 	);
 
 	useEffect(() => {
 		document.addEventListener('keydown', onKeyDown);
-		document.addEventListener('keyup', onKeyUp);
 		return () => {
 			document.removeEventListener('keydown', onKeyDown);
-			document.removeEventListener('keyup', onKeyUp);
 		};
-	}, [onKeyDown, onKeyUp]);
+	}, [onKeyDown]);
 
 	return { direction: direction.current };
 };
