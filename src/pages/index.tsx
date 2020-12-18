@@ -2,11 +2,11 @@ import { Container, Grid } from '@material-ui/core';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Board } from '../components';
 import { useSnakeMovement } from '../hooks';
+import { useSpeed } from '../hooks/ useSpeed';
 import { ICoordinate, ISnake } from '../interfaces';
 import { areMatchingCoordinates, nextSnakeHead } from '../services';
 import { TFieldType } from '../types';
 
-const INTERVAL = 200;
 const ROW_COUNT = 10;
 const COL_COUNT = 10;
 
@@ -26,7 +26,8 @@ export default function GameView() {
 		},
 		tail: [],
 	});
-	const { direction } = useSnakeMovement(INTERVAL);
+	const { increaseSpeed, getIntervalMs } = useSpeed(6);
+	const { direction } = useSnakeMovement(getIntervalMs());
 
 	const isFieldEmpty = useCallback(
 		(coordinate: ICoordinate) => {
@@ -67,28 +68,34 @@ export default function GameView() {
 			if (!areMatchingCoordinates(nextHead, food)) {
 				currentSnake.tail.pop();
 			} else {
+				increaseSpeed(0.2);
 				setFood(getRandomEmptyCoordinate());
 			}
 			return { ...currentSnake };
 		});
-	}, [direction, food, getRandomEmptyCoordinate, isFieldEmpty, snake]);
+	}, [direction, food, getRandomEmptyCoordinate, isFieldEmpty, snake, increaseSpeed]);
 
 	useEffect(() => {
 		setFood(getRandomCoordinate());
 	}, []);
 
 	useEffect(() => {
-		const loopInterval = setInterval(loop, INTERVAL);
+		const loopInterval = setInterval(loop, getIntervalMs());
 		return () => {
 			clearInterval(loopInterval);
 		};
-	}, [loop]);
+	}, [loop, getIntervalMs]);
 
 	return (
 		<Container maxWidth="md">
 			<Grid container spacing={2}>
 				<Grid item xs={12}>
-					<Board displayGrid={false} rowCount={ROW_COUNT} colCount={COL_COUNT} fieldEvaluation={fieldEvaluation} />
+					<Board
+						displayGrid={false}
+						rowCount={ROW_COUNT}
+						colCount={COL_COUNT}
+						fieldEvaluation={fieldEvaluation}
+					/>
 				</Grid>
 			</Grid>
 		</Container>
