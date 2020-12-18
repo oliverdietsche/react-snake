@@ -2,7 +2,7 @@
 
 I've written an according medium article about how I did this project.
 
-> [Medium Article](https://to.be.defined)
+> [Medium Article](https://oliverdietsche.medium.com/snake-game-in-react-using-typescript-ee14efbe4e8b)
 
 > [First Version](https://react-snake-steel.vercel.app)
 
