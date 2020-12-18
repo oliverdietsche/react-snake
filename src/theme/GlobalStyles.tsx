@@ -11,11 +11,6 @@ export function GlobalStyles() {
 			styles={css`
 				body {
 					background: ${theme.palette.background.default};
-					margin-top: 32px;
-				}
-
-				a {
-					text-decoration: none;
 				}
 			`}
 		/>
