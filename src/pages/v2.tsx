@@ -1,7 +1,10 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import { css, jsx } from '@emotion/core';
 import { Container, Grid } from '@material-ui/core';
-import React, { useCallback, useRef, useState } from 'react';
-import { BoardV2 } from '../components';
-import { COL_COUNT, ROW_COUNT } from '../config/GameConfig';
+import { useCallback, useRef, useState } from 'react';
+import { BoardV2, StatusBar } from '../components';
+import { BOARD_SIZE, COL_COUNT, ROW_COUNT } from '../config/GameConfig';
 import { useLoop, useSnakeMovement } from '../hooks';
 import { useSpeed } from '../hooks/ useSpeed';
 import { ICoordinate, ISnake } from '../interfaces';
@@ -10,6 +13,7 @@ import { TFieldType } from '../types';
 
 export default function GameView() {
 	const [board, setBoard] = useState<TFieldType[][]>(generateBoard());
+	const points = useRef(0);
 	const snake = useRef<ISnake>({
 		head: {
 			row: Math.floor(ROW_COUNT / 2),
@@ -47,6 +51,7 @@ export default function GameView() {
 		const colletedFood = areMatchingCoordinates(nextHead, food.current);
 		const fieldToRemove = !colletedFood ? snake.current.tail.pop() : null;
 		if (colletedFood) {
+			points.current = points.current + 1;
 			increaseSpeed(0.2);
 			food.current = getRandomEmptyCoordinate();
 		}
@@ -63,7 +68,15 @@ export default function GameView() {
 		<Container maxWidth="md">
 			<Grid container spacing={2}>
 				<Grid item xs={12}>
-					<BoardV2 displayGrid={false} board={board} />
+					<div
+						css={css`
+							width: ${BOARD_SIZE.width}px;
+							margin: 0 auto;
+						`}
+					>
+						<StatusBar points={points.current} />
+						<BoardV2 displayGrid={false} board={board} />
+					</div>
 				</Grid>
 			</Grid>
 		</Container>
