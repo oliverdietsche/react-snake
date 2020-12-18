@@ -4,11 +4,11 @@ I've written an according medium article about how I did this project.
 
 > [Medium Article](https://to.be.defined)
 
-> [First Version](https://to.be.defined)
+> [First Version](https://react-snake-steel.vercel.app)
 
-> [Second Version](https://to.be.defined)
+> [Second Version](https://react-snake-steel.vercel.app/v2)
 
-> [Storybook](https://to.be.defined)
+> [Storybook](https://react-snake-storybook.vercel.app/?path=/story/components-field--interactive)
 
 ## Why multiple versions?
 
