@@ -9,7 +9,8 @@ export default {
 export const Interactive = (args: IStatusBarProps) => <StatusBar {...args} />;
 const INTERACTIVE_PROPS: IStatusBarProps = {
 	points: 12,
+	restart: () => {},
 };
 Interactive.args = INTERACTIVE_PROPS;
 
-export const Static = () => <StatusBar points={19} />;
+export const Static = () => <StatusBar points={19} restart={() => {}} />;
