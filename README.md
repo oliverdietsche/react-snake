@@ -4,7 +4,7 @@ I've written an according medium article about how I did this project.
 
 > [Medium Article](https://oliverdietsche.medium.com/snake-game-in-react-using-typescript-ee14efbe4e8b)
 <!-- markdownlint-disable-next-line no-blanks-blockquote -->
-> [First Version](https://react-snake-steel.vercel.app)
+> [First Version](https://react-snake-steel.vercel.app/v1)
 <!-- markdownlint-disable-next-line no-blanks-blockquote -->
 > [Second Version](https://react-snake-steel.vercel.app/v2)
 <!-- markdownlint-disable-next-line no-blanks-blockquote -->

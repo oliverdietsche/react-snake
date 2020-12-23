@@ -1,6 +1,6 @@
-import { TFieldType } from '../types';
+import { TBoard } from '../types';
 
-export const EMPTY_10X10_BOARD: TFieldType[][] = [
+export const EMPTY_10X10_BOARD: TBoard = [
 	['empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty'],
 	['empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty'],
 	['empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty'],
@@ -13,7 +13,7 @@ export const EMPTY_10X10_BOARD: TFieldType[][] = [
 	['empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty'],
 ];
 
-export const RANDOM_10X10_BOARD: TFieldType[][] = [
+export const RANDOM_10X10_BOARD: TBoard = [
 	['empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty'],
 	['empty', 'empty', 'empty', 'empty', 'empty', 'snake', 'snake', 'snake', 'empty', 'empty'],
 	['empty', 'empty', 'empty', 'empty', 'empty', 'snake', 'empty', 'snake', 'empty', 'empty'],

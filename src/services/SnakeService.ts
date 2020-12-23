@@ -1,6 +1,6 @@
 import { COL_COUNT, ROW_COUNT } from '../config/GameConfig';
 import { ICoordinate, ISnake } from '../interfaces';
-import { TDirection, TFieldType } from '../types';
+import { TBoard, TDirection, TFieldType } from '../types';
 
 export const nextSnakeHead = (snake: ISnake, direction: TDirection): ICoordinate => {
 	switch (direction) {
@@ -46,7 +46,7 @@ export const getRandomCoordinate = (): ICoordinate => {
 };
 
 export const generateBoard = () => {
-	const board: TFieldType[][] = [];
+	const board: TBoard = [];
 	for (let row = 0; row < ROW_COUNT; row++) {
 		board.push([]);
 		for (let col = 0; col < COL_COUNT; col++) {
@@ -54,4 +54,16 @@ export const generateBoard = () => {
 		}
 	}
 	return board;
+};
+
+export const isCoordinateOnBoard = (coordinate: ICoordinate) => {
+	if (coordinate.row < 0 || coordinate.row > ROW_COUNT - 1) return false;
+	if (coordinate.col < 0 || coordinate.col > COL_COUNT - 1) return false;
+	return true;
+};
+
+export const isFieldOfType = (coordinate: ICoordinate, type: TFieldType, board: TBoard) => {
+	if (!isCoordinateOnBoard(coordinate)) return false; // TODO: error handling
+	if (board[coordinate.row][coordinate.col] === type) return true;
+	return false;
 };

@@ -1,32 +1,16 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import { ReactNode } from 'react';
 import { BOARD_SIZE } from '../../config/GameConfig';
-import { ICoordinate } from '../../interfaces';
-import { TFieldType } from '../../types';
+import { TBoard } from '../../types';
 import { Field } from '../Field';
+
 export interface IBoardProps {
-	rowCount: number;
-	colCount: number;
+	board: TBoard;
 	displayGrid?: boolean;
-	fieldEvaluation?: (coordinate: ICoordinate) => TFieldType;
 }
 
-export function Board({ rowCount, colCount, displayGrid = false, fieldEvaluation }: IBoardProps) {
-	const fields: ReactNode[] = [];
-	for (let row = 0; row < rowCount; row++) {
-		for (let col = 0; col < colCount; col++) {
-			fields.push(
-				<Field
-					key={`${row} - ${col}`}
-					displayGrid={displayGrid}
-					size={{ width: BOARD_SIZE.width / colCount, height: BOARD_SIZE.height / rowCount }}
-					type={fieldEvaluation ? fieldEvaluation({ row, col }) : 'empty'}
-				/>
-			);
-		}
-	}
+export function Board({ board, displayGrid = false }: IBoardProps) {
 	return (
 		<div
 			css={css`
@@ -37,7 +21,18 @@ export function Board({ rowCount, colCount, displayGrid = false, fieldEvaluation
 				${displayGrid ? 'border: 1px solid black;' : ''}
 			`}
 		>
-			{fields}
+			{board.map((row, rowIndex) =>
+				row.map((fieldType, colIndex) => {
+					return (
+						<Field
+							key={`${rowIndex} - ${colIndex}`}
+							type={fieldType}
+							displayGrid={displayGrid}
+							size={{ width: BOARD_SIZE.width / row.length, height: BOARD_SIZE.height / board.length }}
+						/>
+					);
+				})
+			)}
 		</div>
 	);
 }
